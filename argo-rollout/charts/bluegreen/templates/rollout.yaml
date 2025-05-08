@@ -1,5 +1,5 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
 metadata:
   name: {{ include "sample-app.fullname" . }}
   labels:
@@ -18,11 +18,8 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-
       containers:
         - name: {{ .Chart.Name }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
@@ -37,4 +34,8 @@ spec:
             httpGet:
               path: /
               port: http
-       
+  strategy:
+    blueGreen:
+      activeService: {{ include "sample-app.fullname" . }}-active
+      previewService: {{ include "sample-app.fullname" . }}-preview
+      autoPromotionEnabled: false
