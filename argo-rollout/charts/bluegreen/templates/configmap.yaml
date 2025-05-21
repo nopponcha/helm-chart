@@ -6,4 +6,4 @@ metadata:
     {{- include "sample-app.labels" . | nindent 4 }}
 data:
   example-mapping.json: |
-    {{ required "wiremock.mapping is required" .Values.wiremock.mapping | indent 4 }}
+{{ required "wiremock.mapping is required" .Values.wiremock.mapping | nindent 4 }}
