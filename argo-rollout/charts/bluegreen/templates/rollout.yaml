@@ -28,12 +28,6 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
   strategy:
     blueGreen:
       activeService: {{ include "sample-app.fullname" . }}-active
