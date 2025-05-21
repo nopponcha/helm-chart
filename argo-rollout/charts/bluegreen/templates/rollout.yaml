@@ -26,6 +26,15 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
+          volumeMounts:
+            - name: wiremock-mappings
+              mountPath: /home/wiremock/mappings
+
+      volumes:
+        - name: wiremock-mappings
+          configMap:
+            name: {{ include "sample-app.fullname" . }}          
+              
   strategy:
     blueGreen:
       activeService: {{ include "sample-app.fullname" . }}-active
